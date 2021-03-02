@@ -1,0 +1,106 @@
+
+const int anglePin =A0;
+int angle =0;
+const int angleCompensate =0;
+
+const int d1Pin =A1;
+int d1State =LOW;
+int d1Delay =0;//watch 
+
+const int d2Pin =A2;
+int d2State =LOW;
+int d2Delay =0;
+
+char *lables[]={"Angle","Alarm D1","Alarm D2"};
+
+void setup()
+
+{
+
+  Serial.begin(9600);          //  setup serial
+  Serial.println("Robojax SCA60C Angle Sensor");
+
+}
+
+
+
+void loop(){
+  //Robojax Tilt Angle Sensor
+  //Watch video for details: https://youtu.be/5DjO8Fo_AtE
+  getAngle();
+  d1Alarm();
+  d2Alarm();
+  
+  
+  // print out the value you read:
+  Serial.print(lables[0]);// 
+  Serial.print(":");
+  Serial.print(angle);
+  Serial.println("°");//degree symbol
+//  Serial.print("	");
+//  Serial.print(lables[1]);
+//  Serial.print(":");  
+//  Serial.print(d1State);
+//  Serial.print("	");
+//  Serial.print(lables[2]);
+//  Serial.print(":");
+//  Serial.println(d2State);  
+//  Serial.println("======");
+  delay(100);
+//Robojax Tilt Angle Sensor
+}
+
+void getAngle()
+{
+ //watch video instruction https://youtu.be/5DjO8Fo_AtE
+   angle =map(analogRead(A0), 96, 927, -90, 90) + angleCompensate; 
+ 
+}
+
+/**************************************/
+/*! 
+    @brief  get the state of d1 Alarm  HIGH if triggered
+    @param  no parameter
+    @returns returns nothing
+    written by Ahmad Shamshiri on Mar 17, 2020 at 20:20 in Ajax, Ontario ,Canada
+*/
+/**************************************/
+void d1Alarm()
+{
+  //watch video for details: https://youtu.be/5DjO8Fo_AtE
+  //
+  float vo = analogRead(d1Pin) * (5.0 / 1023.0);
+  if(vo < 3.5)
+  {
+    d1State =HIGH;
+    delay(d1Delay);    
+  }else{
+    d1State =LOW;    
+  }
+
+}//d1Alarm() end
+
+
+/**************************************/
+/*! 
+    @brief  get the state of d1 Alarm  HIGH if triggered
+    @param  no parameter
+    @returns returns nothing
+    written by Ahmad Shamshiri on Mar 17, 2020 at 20:20 in Ajax, Ontario ,Canada
+*/
+/**************************************/
+void d2Alarm()
+{
+  //watch video for details: https://youtu.be/5DjO8Fo_AtE
+  //
+  float vo = analogRead(d2Pin) * (5.0 / 1023.0);
+
+  if(vo < 3.5)
+  {
+    d2State =HIGH;
+    delay(d2Delay);    
+  }else{
+    d2State =LOW;    
+  }  
+
+}//d1Alarm() end
